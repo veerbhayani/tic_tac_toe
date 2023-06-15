@@ -12,33 +12,31 @@ class _TicTacToeDemoState extends State<TicTacToeDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(25),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Padding(
-              padding: const EdgeInsets.all(14.0),
+              padding: const EdgeInsets.all(15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Column(
                     children: [
                       const Text(
-                        'Player',
+                        'Player 0',
                         style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                      const Text(
-                        '0',
-                        style: TextStyle(
-                          fontSize: 25,
+                          fontFamily: 'Dancing Script',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'Score ${oScore.toString()}',
+                        oScore.toString(),
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontFamily: 'Dancing Script',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -46,21 +44,39 @@ class _TicTacToeDemoState extends State<TicTacToeDemo> {
                   Column(
                     children: [
                       const Text(
-                        'Player',
+                        'Draw',
                         style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                      const Text(
-                        'X',
-                        style: TextStyle(
-                          fontSize: 25,
+                          fontFamily: 'Dancing Script',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'Score ${xScore.toString()}',
+                        drawScore.toString(),
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontFamily: 'Dancing Script',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        'Player X',
+                        style: TextStyle(
+                          fontFamily: 'Dancing Script',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        xScore.toString(),
+                        style: const TextStyle(
+                          fontFamily: 'Dancing Script',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -78,27 +94,30 @@ class _TicTacToeDemoState extends State<TicTacToeDemo> {
                 ),
                 itemCount: 9,
                 itemBuilder: (context, index) {
-                  return InkWell(
+                  return GestureDetector(
                     onTap: () {
                       tapped(index, context);
                       setState(() {});
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 2,
-                          color: Colors.black,
+                    child: Card(
+                      shape: const ContinuousRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            50,
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue,
+                        side: BorderSide(),
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        displayElement[index],
-                        style: const TextStyle(
-                          fontSize: 50,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                      color: color[index],
+                      child: Center(
+                        child: Text(
+                          displayElement[index],
+                          style: const TextStyle(
+                            fontFamily: 'Dancing Script',
+                            fontSize: 50,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -106,58 +125,40 @@ class _TicTacToeDemoState extends State<TicTacToeDemo> {
                 },
               ),
             ),
-            const Expanded(
-              flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [],
-              ),
-            ),
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   MaterialButton(
                     height: 50,
                     minWidth: 100,
-                    shape: const BeveledRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(
-                          10,
-                        ),
-                      ),
-                      side: BorderSide(
-                        color: Colors.black,
-                      ),
-                    ),
-                    color: Colors.blue,
+                    color: Colors.grey,
                     onPressed: () {
                       clearScoreBoard();
                       setState(() {});
                     },
                     child: const Text(
-                      'Clear Score Board',
+                      'Reset',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontFamily: 'Dancing Script',
+                        fontSize: 25,
                         color: Colors.white,
                       ),
+                    ),
+                  ),
+                  Text(
+                    oTurn ? 'Player O' : 'Player X',
+                    style: const TextStyle(
+                      fontFamily: 'Dancing Script',
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   MaterialButton(
                     height: 50,
                     minWidth: 100,
-                    shape: const BeveledRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(
-                          10,
-                        ),
-                      ),
-                      side: BorderSide(
-                        color: Colors.black,
-                      ),
-                    ),
-                    color: Colors.blue,
+                    color: Colors.grey,
                     onPressed: () {
                       clearBoard();
                       setState(() {});
@@ -165,7 +166,8 @@ class _TicTacToeDemoState extends State<TicTacToeDemo> {
                     child: const Text(
                       'Restart',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontFamily: 'Dancing Script',
+                        fontSize: 25,
                         color: Colors.white,
                       ),
                     ),

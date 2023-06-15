@@ -1,105 +1,85 @@
 import 'package:flutter/material.dart';
 
 bool oTurn = true;
-
-List displayElement = [
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-];
-
+List displayElement = List.generate(9, (index) => '');
 int oScore = 0;
 int xScore = 0;
 int filledBoxes = 0;
+int drawScore = 0;
+List<Color> color = List.generate(9, (index) => Colors.grey);
 
 void tapped(int index, context) {
   if (oTurn && displayElement[index] == '') {
     displayElement[index] = 'O';
     filledBoxes++;
+    color[index] = Colors.red;
   } else if (!oTurn && displayElement[index] == '') {
     displayElement[index] = 'X';
     filledBoxes++;
+    color[index] = Colors.blueAccent;
   }
-
   oTurn = !oTurn;
-  _checkWinner(context);
+  checkWinner(context);
 }
 
-void _checkWinner(context) {
-  // Checking rows
+void checkWinner(context) {
   if (displayElement[0] == displayElement[1] &&
-      displayElement[0] == displayElement[2] &&
-      displayElement[0] != '') {
-    _showWinDialog(displayElement[0], context);
-    clearBoard();
-  }
-  if (displayElement[3] == displayElement[4] &&
-      displayElement[3] == displayElement[5] &&
-      displayElement[3] != '') {
-    _showWinDialog(displayElement[3], context);
-    clearBoard();
-  }
-  if (displayElement[6] == displayElement[7] &&
-      displayElement[6] == displayElement[8] &&
-      displayElement[6] != '') {
-    _showWinDialog(displayElement[6], context);
-    clearBoard();
-  }
-
-  // Checking Column
-  if (displayElement[0] == displayElement[3] &&
-      displayElement[0] == displayElement[6] &&
-      displayElement[0] != '') {
-    _showWinDialog(displayElement[0], context);
-    clearBoard();
-  }
-  if (displayElement[1] == displayElement[4] &&
-      displayElement[1] == displayElement[7] &&
-      displayElement[1] != '') {
-    _showWinDialog(displayElement[1], context);
-    clearBoard();
-  }
-  if (displayElement[2] == displayElement[5] &&
-      displayElement[2] == displayElement[8] &&
-      displayElement[2] != '') {
-    _showWinDialog(displayElement[2], context);
-    clearBoard();
-  }
-
-  // Checking Diagonal
-  if (displayElement[0] == displayElement[4] &&
-      displayElement[0] == displayElement[8] &&
-      displayElement[0] != '') {
-    _showWinDialog(displayElement[0], context);
-    clearBoard();
-  }
-  if (displayElement[2] == displayElement[4] &&
-      displayElement[2] == displayElement[6] &&
-      displayElement[2] != '') {
-    _showWinDialog(displayElement[2], context);
+          displayElement[0] == displayElement[2] &&
+          displayElement[0] != '' ||
+      displayElement[3] == displayElement[4] &&
+          displayElement[3] == displayElement[5] &&
+          displayElement[3] != '' ||
+      displayElement[6] == displayElement[7] &&
+          displayElement[6] == displayElement[8] &&
+          displayElement[6] != '' ||
+      displayElement[0] == displayElement[3] &&
+          displayElement[0] == displayElement[6] &&
+          displayElement[0] != '' ||
+      displayElement[1] == displayElement[4] &&
+          displayElement[1] == displayElement[7] &&
+          displayElement[1] != '' ||
+      displayElement[2] == displayElement[5] &&
+          displayElement[2] == displayElement[8] &&
+          displayElement[2] != '' ||
+      displayElement[2] == displayElement[4] &&
+          displayElement[2] == displayElement[6] &&
+          displayElement[2] != '' ||
+      displayElement[0] == displayElement[4] &&
+          displayElement[0] == displayElement[8] &&
+          displayElement[0] != '') {
+    showWinDialog(context);
     clearBoard();
   } else if (filledBoxes == 9) {
-    _showDrawDialog(context);
+    showDrawDialog(context);
+    drawScore++;
     clearBoard();
   }
 }
 
-void _showWinDialog(String winner, context) {
+void showWinDialog(context) {
   showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("\" $winner \" is Winner!!!"),
+          title: Text(
+            !oTurn ? "Player X is Winner" : 'Player O is Winner',
+            style: const TextStyle(
+              fontFamily: 'Dancing Script',
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           actions: [
             TextButton(
-              child: const Text("Play Again"),
+              child: const Text(
+                "Play Again",
+                style: TextStyle(
+                  fontFamily: 'Dancing Script',
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -108,23 +88,33 @@ void _showWinDialog(String winner, context) {
         );
       });
 
-  if (winner == 'O') {
-    oScore++;
-  } else if (winner == 'X') {
-    xScore++;
-  }
+  (!oTurn) ? ((oScore++), (oTurn = !oTurn)) : ((xScore++), (oTurn = !oTurn));
 }
 
-void _showDrawDialog(context) {
+void showDrawDialog(context) {
   showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Draw"),
+          title: const Text(
+            "Draw",
+            style: TextStyle(
+              fontFamily: 'Dancing Script',
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           actions: [
             TextButton(
-              child: const Text("Play Again"),
+              child: const Text(
+                "Play Again",
+                style: TextStyle(
+                  fontFamily: 'Dancing Script',
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: () {
                 clearBoard();
                 Navigator.of(context).pop();
@@ -136,19 +126,16 @@ void _showDrawDialog(context) {
 }
 
 void clearBoard() {
-  for (int i = 0; i < 9; i++) {
-    displayElement[i] = '';
-  }
-
+  displayElement = List.generate(9, (index) => '');
+  color = List.generate(9, (index) => Colors.grey);
   filledBoxes = 0;
 }
 
 void clearScoreBoard() {
   xScore = 0;
   oScore = 0;
-  for (int i = 0; i < 9; i++) {
-    displayElement[i] = '';
-  }
-
+  drawScore = 0;
+  color = List.generate(9, (index) => Colors.grey);
+  displayElement = List.generate(9, (index) => '');
   filledBoxes = 0;
 }
